@@ -1,0 +1,22 @@
+{
+    "name": "telegram-md",
+    "description": "GOD'S ZEAL MD, A simple Telegram user bot Created by GOD'S ZEAL Tech",
+    "logo": "https://github.com/mauricegift.png",
+    "repository": "https://github.com/Ai/telegram-bot",
+    "keywords": ["telegrambot", "GOD'S ZEAL Tech", "GOD'S ZEAL MD", "GOD'S ZEAL TECH 𝙈𝘿", "GodsZealtelegramBot", "GodszealWaBot","GOD'S ZEAL","GOD'S ZEAL TECH Md telegram Bot","multi device"],
+    "success_url": "/", 
+    "buildpacks": [{ "url": "https://github.com/heroku/heroku-buildpack-nodejs#latest" } ],
+    "env": {      
+      "PORT": {
+        "description": "Port for web app.4000,5000,3000... any!",
+        "value": "3000",
+        "required": true 
+      },
+      "MESSAGE": {
+        "description": "bot connection conformation message",
+        "value": "✅ᴄᴏɴɴᴇᴄᴛᴇᴅ✅ [ 𝐘𝐎𝐔'𝐕𝐄 𝐂𝐇𝐎𝐒𝐄𝐍 GOD'S ZEAL MD ]",
+        "required": false 
+      }
+    }   
+
+}
