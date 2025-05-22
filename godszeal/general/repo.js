@@ -25,4 +25,4 @@ Godszeald.command = ['repo', 'sc', 'script'];
 Godszeald.desc = 'Show Bot Repo';
 Godszeald.category = ['general'];
 
-module.exports = Giftedd;
+module.exports = Godszeald;
