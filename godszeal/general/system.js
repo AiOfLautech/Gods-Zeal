@@ -100,4 +100,4 @@ Godszeald.command = ['system', 'info', 'status'];
 Godszeald.desc = 'Display Bot System Status';
 Godszeald.category = ['general'];
 
-module.exports = Giftedd;
+module.exports = Godszeald;
