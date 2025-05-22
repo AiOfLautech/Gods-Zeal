@@ -4,8 +4,8 @@ const chalk = require('chalk');
 const { sizeFormatter } = require('human-readable');
 const { exec } = require('child_process');
 
-function giftedMonospace(input) {
-    const giftedBoldz = {
+function godszealMonospace(input) {
+    const godszealBoldz = {
          'A': '𝙰', 'B': '𝙱', 'C': '𝙲', 'D': '𝙳', 'E': '𝙴', 'F': '𝙵', 'G': '𝙶',
         'H': '𝙷', 'I': '𝙸', 'J': '𝙹', 'K': '𝙺', 'L': '𝙻', 'M': '𝙼', 'N': '𝙽',
         'O': '𝙾', 'P': '𝙿', 'Q': '𝚀', 'R': '𝚁', 'S': '𝚂', 'T': '𝚃', 'U': '𝚄',
