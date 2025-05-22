@@ -3,7 +3,7 @@
 
    #### Note:
 
-- **Here is a [DEMO VERSION](https://t.me/giftedmd_bot) of this bot project. You can test it out for 🆓**
+- **Here is a [DEMO VERSION](https://t.me/GodsZealBot) of this bot project. You can test it out for 🆓**
 
 - GOD'S ZEAL MD Telegram bot project is designed to automate tasks, respond to commands, and integrate with external services or APIs, offering users a robust interactive experience.
 
@@ -20,12 +20,12 @@
 - Telegram account
 - Telegram Bot Token
 - Telegram Bot User ID(uid)
-- **[`HERE IS`](https://github.com/AiOfLautech/telegram-bot/blob/main/gift/bot-token-and-uid.md) How to get your BOT TOKEN and BOT UID**
+- **[`HERE IS`](https://github.com/AiOfLautech/Gods-Zeal/blob/main/zeal/bot-token-and-uid.md) How to get your BOT TOKEN and BOT UID**
 
-- **First [Fork Repo](https://github.com/AiOfLautech/telegram-bot/fork) to obtain your editable repo.**
+- **First [Fork Repo](https://github.com/AiOfLautech/Gods-Zeal/fork) to obtain your editable repo.**
 
 ### Configure the Bot:
-   - Ensure you **[Fork Repo](https://github.com/AiOfLautech/telegram-bot/fork)** first.
+   - Ensure you **[Fork Repo](https://github.com/AiOfLautech/Gods-Zeal/fork)** first.
 
    - There's a set.js.
    - Navigate to it and Add your bot token, bot user ID(id) and other settings:
@@ -38,7 +38,7 @@
 
 ### Deployment
 
-- **Deploy on [HEROKU](https://github.com/AiOfLautech/telegram-bot/blob/main/zeal/heroku.md)**
+- **Deploy on [HEROKU](https://github.com/AiOfLautech/Gods-Zeal/blob/main/zeal/heroku.md)**
 
 - **Deploy on [RENDER](https://dashboard.render.com/new)**
   
