@@ -6,7 +6,7 @@
 - **Ensure your obtain your Bot Token. See tutorial below 👇**
 - **For example my bot token is:**
   ```
-  7020932494:AAEbZLYTsGfOVBo2i-9zR_dLou9q_jF0_jc
+  8048577591:AAHpgOU5FSZi9kDzMBUnZ2n0UhyF9QIr3zc
   ```
 - *I compressed the video so ain't aware of it's quality*
 
@@ -19,7 +19,7 @@ https://github.com/mouricedevs/telegram-bot/assets/166598671/8bf0cc38-2462-4dac-
 - **Copy Your User ID**
 - **For example my user id is:**
   ```
-  5620932494
+  7654035673
   ```
 
 
