@@ -2,7 +2,8 @@ require('../set');
 const fs = require('fs');
 const axios = require('axios');
 const fetch = require('node-fetch');
-const chalk = require(' = require('path');
+const chalk = require('chalk');
+const path = require('path');
 
 async function godszealLoadDatabase(Godszeal, m) {
     const userId = m.from.id;
