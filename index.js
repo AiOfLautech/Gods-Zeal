@@ -1,7 +1,7 @@
 require('./set');
 const path = require('path');
 const express = require('express');
-const GodszealMd = require('node-telegram-bot-api'); 
+const GodszealMd = require('node-telegram-bot-api');
 const chalk = require('chalk');
 const { customMessage: GodszealMess, DataBase: GodszealDB } = require('./zeal');
 const godszealdb = new GodszealDB();
@@ -17,7 +17,22 @@ app.listen(port, () => console.log(`App running on port ${port}`));
 
 async function startGodszeal() {
     if (!Godszeal) {
-        Godszeal = new GodszealMd(`${global.botToken}`, { polling: true });
+        // Switch between polling (dev) and webhook (production)
+        const isProduction = process.env.NODE_ENV === 'production';
+        if (isProduction) {
+            Godszeal = new GodszealMd(`${global.botToken}`, {
+                webHook: {
+                    port: port
+                }
+            });
+            // Set webhook for your production URL (update to your actual URL)
+            const webhookUrl = process.env.WEBHOOK_URL || `https://gods-zeal.onrender.com/bot${global.botToken}`;
+            Godszeal.setWebHook(webhookUrl);
+            console.log(chalk.green(`Webhook set to: ${webhookUrl}`));
+        } else {
+            Godszeal = new GodszealMd(`${global.botToken}`, { polling: true });
+            console.log(chalk.green('Bot started in polling mode (development)'));
+        }
 
         console.log(chalk.bgHex('#90EE90').hex('#333').bold(' GOD/S ZEAL MD Connected '));
         const miscInfo = await Godszeal.getMe();
