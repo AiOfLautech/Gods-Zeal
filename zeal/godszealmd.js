@@ -2,10 +2,9 @@ require('../set');
 const fs = require('fs');
 const axios = require('axios');
 const fetch = require('node-fetch');
-const chalk = require('chalk');
-const path = require('path');
+const chalk = require(' = require('path');
 
-async function godszealLoadDatabase(Gifted, m) {
+async function godszealLoadDatabase(Godszeal, m) {
     const userId = m.from.id;
     const chatId = m.chat.id;
     const chatType = m.chat.type;
@@ -23,7 +22,7 @@ async function godszealLoadDatabase(Gifted, m) {
     }
 }
 
-async function godszealCustomMessage(Gifted, m) {
+async function godszealCustomMessage(Godszeal, m) {
     const userId = m.from.id;
     const chatId = m.chat.id;
     const chatType = m.chat.type;
@@ -103,7 +102,7 @@ async function godszealCustomMessage(Gifted, m) {
             
             throw new Error('Invalid content type.');
         } catch (error) {
-            console.error('Gifted.reply error:', error.message);
+            console.error('Godszeal.reply error:', error.message);
             await Godszeal.sendMessage(m.chat.id, `Failed to send message: ${error.message}`, {});
         }
     };
