@@ -5,7 +5,7 @@ const fetch = require('node-fetch');
 const chalk = require('chalk');
 const path = require('path');
 
-async function godszealLoadDatabase(Gifted, m) {
+async function godszealLoadDatabase(Godszeal, m) {
     const userId = m.from.id;
     const chatId = m.chat.id;
     const chatType = m.chat.type;
@@ -23,7 +23,7 @@ async function godszealLoadDatabase(Gifted, m) {
     }
 }
 
-async function godszealCustomMessage(Gifted, m) {
+async function godszealCustomMessage(Godszeal, m) {
     const userId = m.from.id;
     const chatId = m.chat.id;
     const chatType = m.chat.type;
