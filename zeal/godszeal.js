@@ -15,7 +15,7 @@ const { fetchJson, clockString, pickRandom, runtime, formatp, executeCommand, lo
 
 module.exports = async (Godszeal) => {
     
-    Gifted.on('message', async (m) => {
+    Godszeal.on('message', async (m) => {
         await loadDatabase(Godszeal, m);
         
         const chatId = m.chat.id;
@@ -25,10 +25,10 @@ module.exports = async (Godszeal) => {
         if (m.text && m.text.startsWith('=>')) {
             if (!m.isOwner) return;
             function Return(result) {
-                GiftedDevs = JSON.stringify(result, null, 2);
-                GiftedDevs = util.format(GiftedDevs);
-                if (GiftedDevs == undefined) {
-                    GiftedDevs = util.format(result);
+                GodszealDevs = JSON.stringify(result, null, 2);
+                GodszealDevs = util.format(GiftedDevs);
+                if (GodszealDevs == undefined) {
+                    GodszealDevs = util.format(result);
                 }
                 return Godszeal.reply({ text: `\`\`\`\n${GodszealDevs}\n\`\`\``, parse_mode: 'Markdown' }, m);
             }
@@ -83,7 +83,7 @@ module.exports = async (Godszeal) => {
         }
     });
     
-    Gifted.onText(`^(?:${global.prefix})(\\w+)`, async (m, match) => {
+    Godszeal.onText(`^(?:${global.prefix})(\\w+)`, async (m, match) => {
         try {
             const chatId = m.chat.id;
             const userId = m.from.id;
@@ -146,11 +146,11 @@ module.exports = async (Godszeal) => {
             handleCases(m, GodszealTech);
         } catch (err) {
             console.log(err);
-            Gifted.reply({ text: `${err}`, parse_mode: 'Markdown' }, m);
+            Godszeal.reply({ text: `${err}`, parse_mode: 'Markdown' }, m);
         }
     });
     
-    Gifted.on('callback_query', async (callbackQuery) => {
+    Godszeal.on('callback_query', async (callbackQuery) => {
         const { data, message: m } = callbackQuery;
         try {
             const parsedData = JSON.parse(data);
@@ -186,11 +186,11 @@ module.exports = async (Godszeal) => {
                     }
                 }
                 handleCases(m, GodszealDevs);
-                await Gifted.answerCallbackQuery(callbackQuery.id);
+                await Godszeal.answerCallbackQuery(callbackQuery.id);
             }
         } catch (err) {
             console.log(err);
-            Gifted.reply({ text: `${err}`, parse_mode: 'Markdown' }, m);
+            Godszeal.reply({ text: `${err}`, parse_mode: 'Markdown' }, m);
         }
     });
 };
