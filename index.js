@@ -1,75 +1,132 @@
-require('./set');
+#!/usr/bin/env node
+
+// Core Dependencies
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const TelegramBot = require('node-telegram-bot-api');
 const chalk = require('chalk');
 
-// import your core modules
-const { plugins } = require('./zeal');
-const ZealUtils = require('./godszealfunc');
+// Load environment configuration
+require('./set');
 
-// --- Simple JSON File DB ---
+// Database Class
 class DataBase {
   constructor(file = path.join(__dirname, 'godszeal_db.json')) {
     this.file = file;
   }
-  godszealRead() {
+
+  /**
+   * Reads and parses the database file
+   * @returns {Object|null} Parsed JSON data or null if error
+   */
+  async godszealRead() {
     try {
-      return JSON.parse(fs.readFileSync(this.file, 'utf-8'));
-    } catch {
+      const raw = fs.readFileSync(this.file, 'utf-8');
+      return JSON.parse(raw);
+    } catch (error) {
+      console.error(chalk.red('DB read error:'), error);
       return null;
     }
   }
-  godszealWrite(db) {
-    fs.writeFileSync(this.file, JSON.stringify(db, null, 2));
-  }
-}
 
-// --- Your message handler (customize as you like) ---
-async function handleMessage(bot, msg) {
-  const text = msg.text || '<no text>';
-  console.log(chalk.blue(`[${msg.chat.id}] ${text}`));
-
-  // example: echo in monospace
-  const reply = ZealUtils.monospace(text);
-  await bot.sendMessage(msg.chat.id, reply);
-}
-
-(async () => {
-  // Express for health-check or webhooks
-  const app = express();
-  app.get('/', (_, res) =>
-    res.sendFile(path.join(__dirname, 'zeal', 'godszeal.html'))
-  );
-  const PORT = process.env.PORT || 7000;
-  app.listen(PORT, () =>
-    console.log(chalk.green(`HTTP server listening on port ${PORT}`))
-  );
-
-  // Telegram bot setup
-  const bot = new TelegramBot(global.botToken, { polling: true });
-  console.log(chalk.bgGreen.black('✅ Telegram bot started!'));
-
-  // show bot info
-  const info = await bot.getMe();
-  console.log(chalk.bold(JSON.stringify(info, null, 2)));
-
-  // init or load DB
-  const db = new DataBase();
-  global.db = db.godszealRead() || { users: {}, groups: {} };
-  db.godszealWrite(global.db);
-
-  // auto-save every 5s
-  setInterval(() => db.godszealWrite(global.db), 5000);
-
-  // bind message handler
-  bot.on('message', msg => handleMessage(bot, msg));
-
-  // load & mount any plugins
-  for (const plugin of plugins) {
-    if (typeof plugin.init === 'function') {
-      plugin.init(bot, ZealUtils, global.db);
+  /**
+   * Writes data to the database file
+   * @param {Object} db - Data to write
+   */
+  async godszealWrite(db) {
+    try {
+      fs.writeFileSync(this.file, JSON.stringify(db, null, 2));
+    } catch (error) {
+      console.error(chalk.red('DB write error:'), error);
     }
   }
-})();
+}
+
+// Message Handler
+/**
+ * Handles incoming Telegram messages
+ * @param {TelegramBot} bot - Telegram bot instance
+ * @param {Object} msg - Message object
+ */
+async function customMessage(bot, msg) {
+  console.log(chalk.blue(`Received message from ${msg.chat.id}: ${msg.text}`));
+  // TODO: Implement custom message handling logic
+}
+
+// Global Variables
+const godszealdb = new DataBase();
+let Godszeal;
+
+// Express Server Setup
+const app = express();
+const port = process.env.PORT || 7000;
+
+/**
+ * Configures Express routes
+ */
+function setupExpress() {
+  app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, './zeal/godszeal.html'));
+  });
+
+  app.listen(port, () => {
+    console.log(chalk.green(`App running on port ${port}`));
+  });
+}
+
+/**
+ * Initializes and starts the Telegram bot
+ */
+async function startGodszeal() {
+  try {
+    // Initialize Telegram Bot
+    if (!Godszeal) {
+      Godszeal = new TelegramBot(global.botToken, { polling: true });
+      console.log(chalk.bgHex('#90EE90').hex('#333').bold(' GOD/S ZEAL MD Connected '));
+
+      // Log bot information
+      const miscInfo = await Godszeal.getMe();
+      console.log(chalk.white.bold('—————————————————'));
+      console.log('Bot Info:', JSON.stringify(miscInfo, null, 2));
+      console.log(chalk.white.bold('—————————————————'));
+    }
+
+    // Initialize Database
+    const loadData = await godszealdb.godszealRead();
+    global.db = loadData || { users: {}, groups: {} };
+    await godszealdb.godszealWrite(global.db);
+
+    // Periodic Database Backup
+    setInterval(async () => {
+      if (global.db) {
+        await godszealdb.godszealWrite(global.db);
+      }
+    }, 5000);
+
+    // Register Message Handler
+    Godszeal.on('message', async (msg) => {
+      await customMessage(Godszeal, msg);
+    });
+
+    // Load Additional Plugins
+    // require('./zeal/godszeal')(Godszeal);
+
+  } catch (error) {
+    console.error(chalk.red('Failed to start Godszeal:'), error);
+  }
+}
+
+/**
+ * Main application initialization
+ */
+async function main() {
+  setupExpress();
+  await startGodszeal();
+}
+
+// Start the application
+main().catch((error) => {
+  console.error(chalk.red('Application initialization failed:'), error);
+  process.exit(1);
+});
