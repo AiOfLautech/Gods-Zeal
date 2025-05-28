@@ -1,77 +1,75 @@
 require('./set');
+const fs = require('fs');
 const path = require('path');
 const express = require('express');
-const GodszealMd = require('node-telegram-bot-api');
+const TelegramBot = require('node-telegram-bot-api');
 const chalk = require('chalk');
-const { customMessage: GodszealMess, DataBase: GodszealDB } = require('./zeal/godszealmd');
-const GodszealFunc = require('./zeal/godszealfunc'); // Only utilities
-const godszealdb = new GodszealDB();
-let Godszeal;
 
-const app = express();
+// import your core modules
+const { plugins } = require('./zeal');
+const ZealUtils = require('./godszealfunc');
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, './zeal/godszeal.html'));
-});
-
-function getAvailablePort(startPort, cb) {
-    const net = require('net');
-    const server = net.createServer();
-    server.listen(startPort, () => {
-        server.once('close', () => cb(startPort));
-        server.close();
-    });
-    server.on('error', () => getAvailablePort(startPort + 1, cb));
+// --- Simple JSON File DB ---
+class DataBase {
+  constructor(file = path.join(__dirname, 'godszeal_db.json')) {
+    this.file = file;
+  }
+  godszealRead() {
+    try {
+      return JSON.parse(fs.readFileSync(this.file, 'utf-8'));
+    } catch {
+      return null;
+    }
+  }
+  godszealWrite(db) {
+    fs.writeFileSync(this.file, JSON.stringify(db, null, 2));
+  }
 }
 
-getAvailablePort(process.env.PORT ? parseInt(process.env.PORT) : 10000, (port) => {
-    app.listen(port, () => console.log(`App running on port ${port}`));
+// --- Your message handler (customize as you like) ---
+async function handleMessage(bot, msg) {
+  const text = msg.text || '<no text>';
+  console.log(chalk.blue(`[${msg.chat.id}] ${text}`));
 
-    async function startGodszeal() {
-        if (!Godszeal) {
-            // Use polling for dev, webhook for prod
-            const isProduction = process.env.NODE_ENV === 'production';
-            if (isProduction) {
-                Godszeal = new GodszealMd(`${global.botToken}`, {
-                    webHook: { port }
-                });
-                const webhookUrl = process.env.WEBHOOK_URL || `https://gods-zeal.onrender.com/bot${global.botToken}`;
-                Godszeal.setWebHook(webhookUrl);
-                console.log(chalk.green(`Webhook set to: ${webhookUrl}`));
-            } else {
-                Godszeal = new GodszealMd(`${global.botToken}`, { polling: true });
-                console.log(chalk.green('Bot started in polling mode (development)'));
-            }
+  // example: echo in monospace
+  const reply = ZealUtils.monospace(text);
+  await bot.sendMessage(msg.chat.id, reply);
+}
 
-            console.log(chalk.bgHex('#90EE90').hex('#333').bold(' GOD/S ZEAL MD Connected '));
-            const miscInfo = await Godszeal.getMe();
-            console.log(chalk.white.bold('—————————————————'));
-            console.log('Bot Info: ', JSON.stringify(miscInfo, null, 2));
-            console.log(chalk.white.bold('—————————————————'));
+(async () => {
+  // Express for health-check or webhooks
+  const app = express();
+  app.get('/', (_, res) =>
+    res.sendFile(path.join(__dirname, 'zeal', 'godszeal.html'))
+  );
+  const PORT = process.env.PORT || 7000;
+  app.listen(PORT, () =>
+    console.log(chalk.green(`HTTP server listening on port ${PORT}`))
+  );
 
-            const loadGodszealData = await godszealdb.godszealRead();
-            if (loadGodszealData && Object.keys(loadGodszealData).length === 0) {
-                global.db = {
-                    users: {},
-                    groups: {},
-                    ...(loadGodszealData || {}),
-                };
-                await godszealdb.godszealWrite(global.db);
-            } else {
-                global.db = loadGodszealData;
-            }
-            setInterval(async () => {
-                if (global.db) await godszealdb.godszealWrite(global.db);
-            }, 5000);
+  // Telegram bot setup
+  const bot = new TelegramBot(global.botToken, { polling: true });
+  console.log(chalk.bgGreen.black('✅ Telegram bot started!'));
 
-            Godszeal.on('message', async (m) => {
-                await GodszealMess(Godszeal, m); // Only pass required dependencies
-            });
+  // show bot info
+  const info = await bot.getMe();
+  console.log(chalk.bold(JSON.stringify(info, null, 2)));
 
-            // DO NOT require zeal/index.js here! Only require files you need directly.
-            require('./zeal/godszeal')(Godszeal);
-        }
+  // init or load DB
+  const db = new DataBase();
+  global.db = db.godszealRead() || { users: {}, groups: {} };
+  db.godszealWrite(global.db);
+
+  // auto-save every 5s
+  setInterval(() => db.godszealWrite(global.db), 5000);
+
+  // bind message handler
+  bot.on('message', msg => handleMessage(bot, msg));
+
+  // load & mount any plugins
+  for (const plugin of plugins) {
+    if (typeof plugin.init === 'function') {
+      plugin.init(bot, ZealUtils, global.db);
     }
-
-    startGodszeal();
-});
+  }
+})();
