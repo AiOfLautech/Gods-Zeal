@@ -120,7 +120,14 @@ module.exports = async (Godszeal) => {
                     if (typeof plugin.before === "function") {
                         if (plugin.before(m, GodszealTech)) continue;
                     }
-                    if (plugin.command.includes(command)) {
+                    // SAFELY CHECK plugin.command
+                    if (
+                        plugin.command &&
+                        (
+                            (Array.isArray(plugin.command) && plugin.command.includes(command)) ||
+                            (typeof plugin.command === 'string' && plugin.command === command)
+                        )
+                    ) {
                         await Godszeal.sendChatAction(chatId, 'typing');
                         if (plugin?.settings?.owner && !m.isOwner) {
                             return Godszeal.reply(zealtechMess.owner, m);
@@ -171,7 +178,14 @@ module.exports = async (Godszeal) => {
             if (parsedData.feature) {
                 for (const plugin of plugins) {
                     try {
-                        if (plugin?.command?.includes(parsedData.feature)) {
+                        // SAFELY CHECK plugin.command
+                        if (
+                            plugin.command &&
+                            (
+                                (Array.isArray(plugin.command) && plugin.command.includes(parsedData.feature)) ||
+                                (typeof plugin.command === 'string' && plugin.command === parsedData.feature)
+                            )
+                        ) {
                             if (typeof plugin === "function") {
                                 await plugin(m, GodszealDevs);
                             } else if (plugin.run) {
