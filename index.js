@@ -9,7 +9,7 @@ let Godszeal;
 const app = express();
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, './zeal/Godszeal.html'));
+    res.sendFile(path.join(__dirname, './zeal/godszeal.html'));
 });
 
 const port = process.env.PORT || 7000;
