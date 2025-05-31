@@ -1,7 +1,7 @@
 global.prefix = '/'; // Set Your Preferred Prefix
 global.botName = 'GOD/S ZEAL'; // Bot Name
 global.botVersion = '2.0.0';
-global.botPic = 'https://files.giftedtech.web.id/file/gifted-md.jpg'; // Can use path, can also use link
+global.botPic = 'https://files.catbox.moe/nqh6u6.jpeg'; // Can use path, can also use link
 global.botToken = '8048577591:AAHpgOU5FSZi9kDzMBUnZ2n0UhyF9QIr3zc'; // Replace With Your Bot Token (Get it from BotFather)
 global.ownerUsername = 'AiOfLautech'; // Replace With Your Telegram Username(For Bot Owner)
 global.timeZone = 'Africa/Lagos'; // Your Time Zone
