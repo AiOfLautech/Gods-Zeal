@@ -8,6 +8,9 @@ module.exports = {
         Godszeal.reply({ text: zealtechMess.wait }, m);
 
         try {
+            if (typeof GodszealApkDl !== 'function') {
+                return Godszeal.reply({ text: 'Internal error: APK downloader not available.' }, m);
+            }
             const godszealAppData = await GodszealApkDl(text);
             if (!godszealAppData || !godszealAppData.link || !godszealAppData.appname) {
                 return Godszeal.reply({ text: 'Failed to fetch app data.' }, m);
@@ -28,7 +31,7 @@ module.exports = {
             }, godszealButtons, m);
         } catch (e) {
             console.error('Error:', e); 
-            Gifted.reply({ text: zealtechMess.error }, m);
+            Godszeal.reply({ text: zealtechMess.error }, m);
         }
     }
 };
