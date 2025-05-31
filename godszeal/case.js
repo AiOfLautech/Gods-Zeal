@@ -1,7 +1,7 @@
 const { fetchJson, clockString, pickRandom, runtime, formatp, executeCommand } = require('../zeal');
 
 module.exports = {
-    async handleCases(m, { Gifted, text, command }) {
+    async handleCases(m, { Godszeal, text, command }) {
         try {
             switch (command) {
                     
