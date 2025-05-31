@@ -1,4 +1,4 @@
-let Godszeald = async (m, { Gifted }) => {
+let Godszeald = async (m, { Godszeal }) => {
 
     let godszealButtons = [
           [
