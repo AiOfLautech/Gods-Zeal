@@ -19,7 +19,7 @@ global.zealApi = 'https://levanter.onrender.com';
 global.godszealWaChannel = 'https://whatsapp.com/channel/0029VaXKAEoKmCPS6Jz7sw0N';
 global.godszealRepo = "https://github.com/AiOfLautech/Gods-Zeal";
 global.godszealApiRepo = "https://api.github.com/repos/AiOfLautech/Gods-Zeal";
-
+GITHUB_TOKEN=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
 global.zealtechMess = {
     internalerr: 'Internal Server Error!',
     owner: 'Owner-Only Feature!',
