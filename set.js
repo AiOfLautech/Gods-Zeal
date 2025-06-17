@@ -16,7 +16,7 @@ global.godszealKey = 'gifted'; // Gifted Api Key
 global.maherApi = 'https://api.nexoracle.com'; // NexOracle Api
 global.maherKey = ''; // NexOracle Api Key
 global.zealApi = 'https://levanter.onrender.com';
-global.godszealWaChannel = 'https://whatsapp.com/channel/0029VaXKAEoKmCPS6J';
+global.godszealWaChannel = 'https://whatsapp.com/channel/0029VaXKAEoKmCPS6Jz7sw0N';
 global.godszealRepo = "https://github.com/AiOfLautech/Gods-Zeal";
 global.godszealApiRepo = "https://api.github.com/repos/AiOfLautech/Gods-Zeal";
 
