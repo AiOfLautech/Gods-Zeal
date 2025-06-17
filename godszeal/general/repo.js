@@ -1,42 +1,12 @@
 const axios = require('axios');
 
 let Godszeald = async (m, { Godszeal, sender }) => {
-  // Use authenticated API call if GITHUB_TOKEN is set, to avoid rate limits
   const repoUrl = global.godszealApiRepo;
-  const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-  const headers = {
-    Accept: 'application/vnd.github+json',
-    'User-Agent': 'axios/1.10.0',
-  };
-  if (GITHUB_TOKEN) {
-    headers.Authorization = `Bearer ${GITHUB_TOKEN}`;
-  }
-
-  let repoData;
-  try {
-    const response = await axios.get(repoUrl, { headers });
-    repoData = response.data;
-  } catch (error) {
-    let msg = 'Error fetching repo data.';
-    if (error.response && error.response.data && error.response.data.message) {
-      msg += ` Reason: ${error.response.data.message}`;
-    }
-    await Godszeal.reply(msg, [], m);
-    return;
-  }
+  const response = await axios.get(repoUrl);
+  const repoData = response.data;
   const { name, forks_count, stargazers_count, html_url, created_at, updated_at, owner } = repoData;
 
-  let godszealMess = `Hello *@${sender},*
-This is *God's Zeal MD,* A Telegram Bot Built by *@${global.ownerUsername},* Enhanced with Amazing Features to Make Your Telegram Communication and Interaction Easier!
-
-*Repository*: [${name}](${html_url})
-*Owner*: ${owner.login}
-*Stars*: ${stargazers_count}
-*Forks*: ${forks_count}
-*Created*: ${created_at}
-*Updated*: ${updated_at}
-
-Want to contribute or deploy your own? Check the repo below!`;
+  let godszealMess = `Hello *@${sender},*\nThis is *Godszeal-Md,* A Telegram Bot Built by *@${global.ownerUsername},* Enhanced with Amazing Features to Make Your Telegram Communication and Interaction Experience Amazing\n\n*ʀᴇᴘᴏ ʟɪɴᴋ:* ${global.godszealRepo}\n\n*❲❒❳ ɴᴀᴍᴇ:* ${name}\n*❲❒❳ sᴛᴀʀs:* ${stargazers_count}\n*❲❒❳ ғᴏʀᴋs:* ${forks_count}\n*❲❒❳ ᴄʀᴇᴀᴛᴇᴅ ᴏɴ:* ${new Date(created_at).toLocaleDateString()}\n*❲❒❳ ʟᴀsᴛ ᴜᴘᴅᴀᴛᴇᴅ:* ${new Date(updated_at).toLocaleDateString()}\n*❲❒❳ ᴏᴡɴᴇʀ:* ${owner.login}`;
 
   let godszealButtons = [
     [
@@ -48,11 +18,7 @@ Want to contribute or deploy your own? Check the repo below!`;
     ]
   ];
 
-  Godszeal.reply(
-    { image: { url: global.botPic }, caption: godszealMess, parse_mode: 'Markdown' },
-    godszealButtons,
-    m
-  );
+  Godszeal.reply({ image: { url: global.botPic }, caption: godszealMess, parse_mode: 'Markdown' }, godszealButtons, m);
 };
 
 Godszeald.command = ['repo', 'sc', 'script'];
