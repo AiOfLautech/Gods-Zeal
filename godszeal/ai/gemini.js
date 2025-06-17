@@ -1,32 +1,35 @@
+const fs = require('fs');
+
 let Godszeald = async (m, { Godszeal, text, fetchJson }) => {
     if (!text) {
-        Godszeal.reply({ text: `Provide Some Text ie ${global.prefix}gemini I Need Assistance.` }, m);
+        Godszeal.reply({ text: `Provide Some Text ie ${global.prefix}flux A Cute Cat` }, m);
         return;
     }
 
     Godszeal.reply({ text: zealtechMess.wait }, m);
 
-    // Button definitions (unused if reply doesn't support them)
-    // let godszealButtons = [
-    //     [
-    //         { text: 'Ai Web', url: `${global.godszealaichatWeb}/ai` },
-    //         { text: 'WaChannel', url: global.godszealWaChannel }
-    //     ]
-    // ];
+    // Path to temp directory
+    const tempDir = '/opt/render/project/src/temp';
 
     try {
-        const aiResponse = await fetchJson(`${global.godszealApi}/ai/geminiai?apikey=${global.godszealKey}&q=${text}`);
-        const godszealResponse = aiResponse.result;
+        // Ensure temp directory exists
+        if (!fs.existsSync(tempDir)) {
+            fs.mkdirSync(tempDir, { recursive: true });
+        }
 
-        Godszeal.reply({ text: godszealResponse }, m);
+        const godszealRes = await fetchJson(`${global.godszealApi}/ai/fluximg?apikey=${global.godszealKey}&prompt=${encodeURIComponent(text)}`);
+        Godszeal.downloadAndSend(
+            { image: godszealRes.result, caption: zealtechMess.done },
+            m
+        );
     } catch (error) {
-        console.error('Error occurred while fetching AI data:', error);
-        Godszeal.reply({ text: 'Gemini Ai is Unavailable Right Now.' }, m);
+        console.error('Error occurred while fetching AI data or sending image:', error);
+        Godszeal.reply({ text: 'Flux is Unavailable Right Now.' }, m);
     }
 };
 
-Godszeald.command = ['gemini', 'geminiai'];
-Godszeald.desc = 'Gemini Ai Chat';
+Godszeald.command = ['flux', 'fluximg'];
+Godszeald.desc = 'Flux Image Generator';
 Godszeald.category = ['ai'];
 
 module.exports = Godszeald;
